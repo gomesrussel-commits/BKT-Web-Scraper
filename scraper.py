@@ -1,16 +1,10 @@
-from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
+import json
+import requests
 import pandas as pd
-import time
-import re
+from bs4 import BeautifulSoup
 
 BASE_URL = "https://commercial.bkt-tires.com"
-START_URL = "https://commercial.bkt-tires.com/en-in/products-search/"
 
-all_products = []
-
-
-def clean(text):
-    if not text:
-        return ""
-    return re.sub(r"\s+", " ", text).strip()
+HEADERS = {
+    "User-Agent": "Mozilla/5.0"
+}
