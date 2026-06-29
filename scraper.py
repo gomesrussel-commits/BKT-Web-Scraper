@@ -38,3 +38,65 @@ def get_archive_json():
     json_text = text[start:end]
 
     return json.loads(json_text)
+def extract_products(products):
+
+    rows = []
+
+    for p in products:
+
+        rows.append({
+
+            "Product Name": p.get("name"),
+
+            "Slug": p.get("slug"),
+
+            "Description": p.get("description"),
+
+            "Product Type": p.get("product_type"),
+
+            "Locale": p.get("locale"),
+
+            "Applications": ", ".join(
+                [a.get("label", "") for a in p.get("applications", [])]
+            ),
+
+            "Sectors": ", ".join(
+                [s.get("label", "") for s in p.get("sectors", [])]
+            ),
+
+            "Highlights": " | ".join(
+                [h.get("highlight_text", "") for h in p.get("highlights", [])]
+            ),
+
+            "Image URL": p.get("url"),
+
+            "Preview Image": (
+                p.get("preview", {}).get("url")
+                if isinstance(p.get("preview"), dict)
+                else ""
+            ),
+
+            "Published": p.get("publishing_status"),
+
+            "Remote Updated": p.get("remote_updated_at")
+
+        })
+
+    return pd.DataFrame(rows)
+def main():
+
+    print("Downloading product data...")
+
+    products = get_archive_json()
+
+    print(f"Products Found: {len(products)}")
+
+    df = extract_products(products)
+
+    df.to_excel("BKT_PRODUCTS.xlsx", index=False)
+
+    print("Excel exported successfully!")
+
+if __name__ == "__main__":
+    main()
+    
