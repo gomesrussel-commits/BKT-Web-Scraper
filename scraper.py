@@ -21,9 +21,12 @@ def get_archive_json():
         "User-Agent": "Mozilla/5.0"
     }
 
-    html = requests.get(url, headers=headers).text
+    response = requests.get(url, headers=headers)
 
-    soup = BeautifulSoup(html, "html.parser")
+    print("Status Code:", response.status_code)
+    print(response.text[:1000])
+
+    soup = BeautifulSoup(response.text, "html.parser")
 
     script = soup.find("script", id="bkt-archive-data")
 
